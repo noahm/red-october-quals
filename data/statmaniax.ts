@@ -25,8 +25,8 @@ function cacheKey(songId: number, mode: Mode) {
 
 export async function cachedScoresForSong(songId: number, mode: Mode) {
   const key = cacheKey(songId, mode);
-  // const cache = await kv.get<Score[]>(key);
-  // if (cache) return cache;
+  const cache = await kv.get<Score[]>(key);
+  if (cache) return cache;
   const results = await getScoresForSong(songId, mode);
   kv.set(key, results, { ex: EXPIRE_SECONDS });
   return results;
