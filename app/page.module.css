@@ -45,6 +45,11 @@
   text-align: right;
 }
 
+.loadingTable {
+  height: 25em;
+  background-image: var(--primary-glow);
+}
+
 .scoreTable {
   width: 100%;
 }
