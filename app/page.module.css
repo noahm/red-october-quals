@@ -89,6 +89,7 @@
 
 .scoreTable tr.rowHighlight {
   background-color: rgb(var(--highlight-color-rgb));
+  outline: 1px solid rgb(var(--foreground-rgb));
 }
 
 .center {
