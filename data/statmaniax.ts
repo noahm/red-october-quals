@@ -15,33 +15,38 @@ export enum Mode {
   Team,
 }
 
-interface Score {
+export interface Score {
   name: string;
   score: number;
   timestamp: string;
 }
 
-function cacheKey(songId: number, mode: Mode) {
-  return `song:${songId};mode:${mode}`;
+export interface SongInMode {
+  id: number;
+  mode: Mode;
 }
 
-export const filteredScoresForSong = cache(async (songId: number, mode: Mode) =>
-  filterPlayers(await cachedScoresForSong(songId, mode)),
+function cacheKey({ id, mode }: SongInMode) {
+  return `song:${id};mode:${mode}`;
+}
+
+export const filteredScoresForSong = cache(async (sim: SongInMode) =>
+  filterPlayers(await cachedScoresForSong(sim)),
 );
 
 export const revalidate = EXPIRE_SECONDS;
 
-async function cachedScoresForSong(songId: number, mode: Mode) {
-  const key = cacheKey(songId, mode);
+async function cachedScoresForSong(sim: SongInMode) {
+  const key = cacheKey(sim);
   const cache = await kv.get<Score[]>(key);
   if (cache) return cache;
-  const results = await getScoresForSong(songId, mode);
+  const results = await getScoresForSong(sim);
   kv.set(key, results, { ex: EXPIRE_SECONDS });
   return results;
 }
 
-async function getScoresForSong(songId: number, mode: Mode) {
-  const url = `https://statmaniax.com/song/${songId}/${mode}`;
+async function getScoresForSong({ id, mode }: SongInMode) {
+  const url = `https://statmaniax.com/song/${id}/${mode}`;
   const resp = await fetch(url, { cache: "no-cache" });
   const dom = new JSDOM(await resp.arrayBuffer());
   const scoreRows = dom.window.document.querySelectorAll("#hiscores tbody tr");
