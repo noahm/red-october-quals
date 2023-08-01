@@ -12,7 +12,6 @@ export enum Mode {
   Wild,
   Dual,
   Full,
-  Team,
 }
 
 export interface Score {
@@ -34,15 +33,17 @@ export const filteredScoresForSong = cache(async (sim: SongInMode) =>
   filterPlayers(await cachedScoresForSong(sim)),
 );
 
-export const revalidate = EXPIRE_SECONDS;
+export async function refreshCacheForSong(sim: SongInMode) {
+  const results = await getScoresForSong(sim);
+  kv.set(cacheKey(sim), results, { ex: EXPIRE_SECONDS });
+  return results;
+}
 
 async function cachedScoresForSong(sim: SongInMode) {
   const key = cacheKey(sim);
   const cache = await kv.get<Score[]>(key);
   if (cache) return cache;
-  const results = await getScoresForSong(sim);
-  kv.set(key, results, { ex: EXPIRE_SECONDS });
-  return results;
+  return refreshCacheForSong(sim);
 }
 
 async function getScoresForSong({ id, mode }: SongInMode) {

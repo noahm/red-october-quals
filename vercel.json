@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/refetch",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}
