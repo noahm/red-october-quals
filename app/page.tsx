@@ -1,30 +1,46 @@
 import styles from "./page.module.css";
 import { Mode, SongInMode, filteredScoresForSong } from "@/data/statmaniax";
 import { Suspense } from "react";
+import { TableRow, HighlightContextProvider } from "./highlights";
 
 const groups = [
   {
     name: "Mild",
     songs: [
-      { title: "Everything is Changing", song: { id: 615, mode: Mode.Wild } },
-      { title: "Love", song: { id: 1558, mode: Mode.Wild } },
-      { title: "Stockholm to Bombay", song: { id: 1554, mode: Mode.Wild } },
+      {
+        title: "Everything is Changing - Wild 19",
+        song: { id: 615, mode: Mode.Wild },
+      },
+      { title: "Love - Wild 20", song: { id: 1558, mode: Mode.Wild } },
+      {
+        title: "Stockholm to Bombay - Wild 21",
+        song: { id: 1554, mode: Mode.Wild },
+      },
     ],
   },
   {
     name: "Wild",
     songs: [
-      { title: "Forever and a Day", song: { id: 1531, mode: Mode.Wild } },
-      { title: "Exotica", song: { id: 12129, mode: Mode.Wild } },
-      { title: "Rainbow Rave Parade", song: { id: 1510, mode: Mode.Wild } },
+      {
+        title: "Forever and a Day - Wild 22",
+        song: { id: 1531, mode: Mode.Wild },
+      },
+      { title: "Exotica - Wild 23", song: { id: 12129, mode: Mode.Wild } },
+      {
+        title: "Rainbow Rave Parade - Wild 24",
+        song: { id: 1510, mode: Mode.Wild },
+      },
     ],
   },
   {
     name: "Full",
     songs: [
-      { title: "Secret 2K12", song: { id: 218, mode: Mode.Full } },
-      { title: "Boom Boom Dollars", song: { id: 30164, mode: Mode.Full } },
-      { title: "Into My Dream", song: { id: 1379, mode: Mode.Full } },
+      { title: "Secret 2K12 - Full 22", song: { id: 218, mode: Mode.Full } },
+      {
+        title: "Boom Boom Dollars - Full 23",
+        song: { id: 30164, mode: Mode.Full },
+      },
+      { title: "Into My Dream - Full 24", song: { id: 1379, mode: Mode.Full } },
     ],
   },
 ];
@@ -36,26 +52,28 @@ export default function Home() {
         <h1>Red October Qualifiers</h1>
       </div>
 
-      <div className={styles.grid}>
-        {groups.map((group) => (
-          <>
-            {group.songs.map((table) => (
-              <div key={table.song.id}>
-                <h2>{table.title}</h2>
+      <HighlightContextProvider>
+        <div className={styles.grid}>
+          {groups.map((group) => (
+            <>
+              {group.songs.map((table) => (
+                <div key={table.song.id}>
+                  <h2>{table.title}</h2>
+                  <Suspense fallback={<div className={styles.loadingTable} />}>
+                    <ScoreTable song={table.song} />
+                  </Suspense>
+                </div>
+              ))}
+              <div>
+                <h2>Totals: {group.name}</h2>
                 <Suspense fallback={<div className={styles.loadingTable} />}>
-                  <ScoreTable song={table.song} />
+                  <TotalTable songs={group.songs.map((s) => s.song)} />
                 </Suspense>
               </div>
-            ))}
-            <div>
-              <h2>Totals: {group.name}</h2>
-              <Suspense fallback={<div className={styles.loadingTable} />}>
-                <TotalTable songs={group.songs.map((s) => s.song)} />
-              </Suspense>
-            </div>
-          </>
-        ))}
-      </div>
+            </>
+          ))}
+        </div>
+      </HighlightContextProvider>
     </main>
   );
 }
@@ -67,7 +85,7 @@ async function ScoreTable(props: { song: SongInMode }) {
     <table className={styles.scoreTable}>
       <tbody>
         {scores.map((score, idx) => (
-          <tr key={score.name}>
+          <TableRow key={score.name} name={score.name}>
             <td className={styles.ranks}>{rankForScore(idx, scoreAtIndex)}</td>
             <td className={styles.leftAlign}>{score.name}</td>
             <td className={styles.rightAlign}>
@@ -78,7 +96,7 @@ async function ScoreTable(props: { song: SongInMode }) {
                 {new Date(score.timestamp).toLocaleDateString()}
               </time>
             </td>
-          </tr>
+          </TableRow>
         ))}
       </tbody>
     </table>
@@ -105,11 +123,11 @@ async function TotalTable(props: { songs: SongInMode[] }) {
     <table className={styles.scoreTable}>
       <tbody>
         {sortedScores.map(([name, score], idx) => (
-          <tr key={name}>
+          <TableRow key={name} name={name}>
             <td className={styles.ranks}>{rankForScore(idx, scoreAtIndex)}</td>
             <td className={styles.leftAlign}>{name}</td>
             <td className={styles.rightAlign}>{score.toLocaleString()}</td>
-          </tr>
+          </TableRow>
         ))}
       </tbody>
     </table>
