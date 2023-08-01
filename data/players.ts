@@ -9,7 +9,7 @@ const players = new Set([
   "Eesa",
   "chezmix",
   "Telperion",
-  "JENNIFER", // ???
+  "Jennergy",
   "JennuineInc",
   "JellySlosh",
   "emcat",

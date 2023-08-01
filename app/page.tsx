@@ -1,6 +1,5 @@
-import { filterPlayers } from "@/data/players";
 import styles from "./page.module.css";
-import { Mode, cachedScoresForSong } from "@/data/statmaniax";
+import { Mode, filteredScoresForSong } from "@/data/statmaniax";
 import { Suspense } from "react";
 
 const songs = [
@@ -15,7 +14,7 @@ const songs = [
   { title: "Into My Dream", id: 1379, mode: Mode.Full },
 ];
 
-export default async function Home() {
+export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -23,7 +22,7 @@ export default async function Home() {
       </div>
 
       <div className={styles.grid}>
-        {songs.map(async (song) => (
+        {songs.map((song) => (
           <div key={song.id}>
             <h2>{song.title}</h2>
             <Suspense fallback={<div className={styles.loadingTable} />}>
@@ -40,7 +39,7 @@ async function ScoreTable(props: { songId: number; mode: Mode }) {
   return (
     <table className={styles.scoreTable}>
       <tbody>
-        {filterPlayers(await cachedScoresForSong(props.songId, props.mode)).map(
+        {(await filteredScoresForSong(props.songId, props.mode)).map(
           (score) => (
             <tr key={score.name}>
               <td className={styles.leftAlign}>{score.name}</td>
