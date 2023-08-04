@@ -1,7 +1,7 @@
 import { JSDOM } from "jsdom";
 import { kv } from "@vercel/kv";
 
-const EXPIRE_SECONDS = 3600;
+const EXPIRE_SECONDS = 60 * 60 * 36;
 
 export enum Mode {
   Beginner,
