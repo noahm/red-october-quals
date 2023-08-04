@@ -89,4 +89,4 @@ export const groups = [
   },
 ];
 
-export const songs = groups.flatMap((g) => g.songs.map((s) => s.song));
+export const songs = groups.flatMap((g) => g.songs);
