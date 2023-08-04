@@ -11,11 +11,18 @@ export async function GET(_: Request) {
   const randomSong = songs[refetchIndex];
   await refreshCacheForSong(randomSong.song);
   await kv.set(lastIndexKey, refetchIndex);
-  const resp = NextResponse.json({
-    status: "ok",
-    index: refetchIndex,
-    song: randomSong.title,
-  });
-  resp.headers.set("cache-control", "no-store");
-  return resp;
+  return NextResponse.json(
+    {
+      status: "ok",
+      index: refetchIndex,
+      song: randomSong.title,
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store",
+        "CDN-Cache-Control": "no-store",
+        "Vercel-CDN-Cache-Control": "no-store",
+      },
+    },
+  );
 }
