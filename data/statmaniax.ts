@@ -1,7 +1,5 @@
 import { JSDOM } from "jsdom";
-import { cache } from "react";
 import { kv } from "@vercel/kv";
-import { filterPlayers } from "./players";
 
 const EXPIRE_SECONDS = 3600;
 
@@ -29,9 +27,17 @@ function cacheKey({ id, mode }: SongInMode) {
   return `song:${id};mode:${mode}`;
 }
 
-export const filteredScoresForSong = cache(async (sim: SongInMode) =>
-  filterPlayers(await cachedScoresForSong(sim)),
-);
+function filterPlayers<T extends { name: string }>(
+  list: Iterable<T>,
+  players: Set<string>,
+) {
+  return Array.from(list).filter((item) => players.has(item.name));
+}
+
+export const filteredScoresForSong = async (
+  players: Set<string>,
+  sim: SongInMode,
+) => filterPlayers(await cachedScoresForSong(sim), players);
 
 export async function refreshCacheForSong(sim: SongInMode) {
   const results = await getScoresForSong(sim);

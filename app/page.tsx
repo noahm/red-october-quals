@@ -2,7 +2,7 @@ import styles from "./page.module.css";
 import { SongInMode, filteredScoresForSong } from "@/data/statmaniax";
 import { Suspense } from "react";
 import { TableRow, HighlightContextProvider } from "./highlights";
-import { groups } from "@/data/songs";
+import { groups } from "@/data/event-data";
 
 export default function Home() {
   return (
@@ -19,14 +19,17 @@ export default function Home() {
                 <div key={table.song.id}>
                   <h2>{table.title}</h2>
                   <Suspense fallback={<div className={styles.loadingTable} />}>
-                    <ScoreTable song={table.song} />
+                    <ScoreTable song={table.song} players={group.players} />
                   </Suspense>
                 </div>
               ))}
               <div>
                 <h2>Totals: {group.name}</h2>
                 <Suspense fallback={<div className={styles.loadingTable} />}>
-                  <TotalTable songs={group.songs.map((s) => s.song)} />
+                  <TotalTable
+                    songs={group.songs.map((s) => s.song)}
+                    players={group.players}
+                  />
                 </Suspense>
               </div>
             </>
@@ -37,8 +40,8 @@ export default function Home() {
   );
 }
 
-async function ScoreTable(props: { song: SongInMode }) {
-  const scores = await filteredScoresForSong(props.song);
+async function ScoreTable(props: { song: SongInMode; players: Set<string> }) {
+  const scores = await filteredScoresForSong(props.players, props.song);
   const scoreAtIndex = (idx: number) => scores[idx].score;
   return (
     <table className={styles.scoreTable}>
@@ -62,9 +65,12 @@ async function ScoreTable(props: { song: SongInMode }) {
   );
 }
 
-async function TotalTable(props: { songs: SongInMode[] }) {
+async function TotalTable(props: {
+  songs: SongInMode[];
+  players: Set<string>;
+}) {
   const scoresBySong = await Promise.all(
-    props.songs.map(filteredScoresForSong),
+    props.songs.map(filteredScoresForSong.bind(undefined, props.players)),
   );
   const scorePerPlayer = new Map<string, number>();
   for (const songScores of scoresBySong) {
