@@ -27,7 +27,6 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   Sneaky: { wild: true },
 
   // mild only
-  Cathadan: { mild: true },
   Jennergy: { mild: true },
   JennuineInc: { mild: true },
   ZOM585: { mild: true },
@@ -35,6 +34,7 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   Tokn316: { mild: true },
 
   // no full
+  Cathadan: { mild: true, wild: true },
   Shinobee: { wild: true, mild: true },
 };
 
