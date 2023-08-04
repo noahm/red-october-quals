@@ -1,6 +1,6 @@
 import styles from "./page.module.css";
 import { SongInMode, filteredScoresForSong } from "@/data/statmaniax";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { TableRow, HighlightContextProvider } from "./highlights";
 import { groups } from "@/data/event-data";
 
@@ -14,7 +14,7 @@ export default function Home() {
       <HighlightContextProvider>
         <div className={styles.grid}>
           {groups.map((group) => (
-            <>
+            <Fragment key={group.name}>
               {group.songs.map((table) => (
                 <div key={table.song.id}>
                   <h2>{table.title}</h2>
@@ -32,7 +32,7 @@ export default function Home() {
                   />
                 </Suspense>
               </div>
-            </>
+            </Fragment>
           ))}
         </div>
       </HighlightContextProvider>

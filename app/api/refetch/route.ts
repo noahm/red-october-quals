@@ -1,4 +1,4 @@
-import { songs } from "@/data/songs";
+import { songs } from "@/data/event-data";
 import { refreshCacheForSong } from "@/data/statmaniax";
 import { NextResponse } from "next/server";
 
