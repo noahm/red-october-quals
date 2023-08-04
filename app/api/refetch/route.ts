@@ -11,9 +11,11 @@ export async function GET(_: Request) {
   const randomSong = songs[refetchIndex];
   await refreshCacheForSong(randomSong.song);
   await kv.set(lastIndexKey, refetchIndex);
-  return NextResponse.json({
+  const resp = NextResponse.json({
     status: "ok",
     index: refetchIndex,
     song: randomSong.title,
   });
+  resp.headers.set("cache-control", "no-store");
+  return resp;
 }
