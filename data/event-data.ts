@@ -34,6 +34,7 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   ZOM585: { mild: true },
   EndersteveMC: { mild: true },
   Tokn316: { mild: true },
+  "Big Matt": { mild: true },
 
   // no full
   Cathadan: { mild: true, wild: true },
