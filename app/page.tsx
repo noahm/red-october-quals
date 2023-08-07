@@ -3,6 +3,7 @@ import { SongMode, filteredScoresForSong } from "@/data/statmaniax";
 import { Fragment, Suspense } from "react";
 import { TableRow, HighlightContextProvider } from "./highlights";
 import { groups } from "@/data/event-data";
+import { PreviewForm } from "./preview";
 
 export default function Home({
   searchParams,
@@ -16,7 +17,7 @@ export default function Home({
         <h1>Red October Qualifiers</h1>
         <h2 className={styles.previewHeader}>
           Preview Player Placement
-          <form action="/" method="GET" className={styles.form}>
+          <PreviewForm>
             <input
               type="search"
               defaultValue={searchParams.preview}
@@ -25,7 +26,7 @@ export default function Home({
               enterKeyHint="go"
             />
             <button>Go</button>
-          </form>
+          </PreviewForm>
         </h2>
       </div>
       <HighlightContextProvider>
