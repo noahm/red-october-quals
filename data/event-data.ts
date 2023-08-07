@@ -19,6 +19,7 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   "JJK.": { wild: true, full: true },
   werdwerdus: { wild: true, full: true, mild: true },
   Grady: { wild: true, full: true },
+  WDrM: { wild: true, full: true },
 
   // wild only
   Yokamaa: { wild: true },
