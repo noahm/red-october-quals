@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import styles from "./page.module.css";
+import { cn } from "./utils";
 
 interface ContextValue {
   highlight: string | undefined;
@@ -40,12 +41,17 @@ export function HighlightContextProvider(props: { children: ReactNode }) {
   );
 }
 
-export function TableRow(props: PropsWithChildren<{ name: string }>) {
+export function TableRow(
+  props: PropsWithChildren<{ name: string; isPreview?: boolean }>,
+) {
   const { highlight, setHighlight } = useHighlightContext();
   return (
     <tr
       onClick={() => setHighlight(props.name)}
-      className={highlight === props.name ? styles.rowHighlight : undefined}
+      className={cn({
+        [styles.rowHighlight]: highlight === props.name,
+        [styles.previewRow]: props.isPreview,
+      })}
     >
       {props.children}
     </tr>

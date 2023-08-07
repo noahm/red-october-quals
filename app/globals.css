@@ -76,6 +76,8 @@
 
     --hover-color-rgb: 25, 25, 25;
     --highlight-color-rgb: 50, 50, 50;
+
+    --preview-color-rgba: 255, 255, 80, 0.3;
   }
 }
 

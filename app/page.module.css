@@ -9,21 +9,21 @@
 
 .description {
   display: inherit;
+  flex-direction: column;
   justify-content: center;
   align-items: inherit;
   font-size: 0.85rem;
   max-width: var(--max-width);
   width: 100%;
   z-index: 2;
-  font-family: var(--font-mono);
   margin-top: -3rem;
   margin-bottom: 3rem;
 }
 
 .description h1 {
-  position: relative;
   margin: 0;
   padding: 1rem;
+  font-family: var(--font-mono);
   background-color: rgba(var(--callout-rgb), 0.5);
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   border-radius: var(--border-radius);
@@ -68,6 +68,19 @@
   width: 0;
 }
 
+.previewHeader {
+  margin-bottom: 1em;
+  padding: 1em;
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: var(--border-radius);
+}
+
+.previewHeader,
+.previewHeader input,
+.previewHeader button {
+  font-size: 1.2rem;
+}
+
 .loadingTable {
   height: 25em;
   background-image: var(--primary-glow);
@@ -90,6 +103,11 @@
 .scoreTable tr.rowHighlight {
   background-color: rgb(var(--highlight-color-rgb));
   outline: 1px solid rgb(var(--foreground-rgb));
+}
+
+.scoreTable tr.previewRow {
+  background-color: rgba(var(--preview-color-rgba));
+  /* outline: 1px solid rgba(var(--preview-color-rgba)); */
 }
 
 .center {
@@ -153,9 +171,7 @@
     justify-content: center;
     position: fixed;
     width: 100%;
-  }
 
-  .description h1 {
     align-items: center;
     inset: 0 0 auto;
     padding: 2rem 1rem 1.4rem;

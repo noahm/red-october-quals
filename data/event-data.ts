@@ -1,4 +1,4 @@
-import { Mode } from "./statmaniax";
+import type { SongMode } from "./statmaniax";
 
 const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   // everything
@@ -41,23 +41,29 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
 
 function allPlayersFor(event: "wild" | "mild" | "full") {
   return new Set(
-    Object.keys(players).filter((player) => !!players[player][event]),
+    Object.keys(players)
+      .filter((player) => !!players[player][event])
+      .map((name) => name.toUpperCase()),
   );
 }
 
-export const groups = [
+export const groups: Array<{
+  name: string;
+  players: Set<string>;
+  songs: Array<{ title: string; song: SongMode }>;
+}> = [
   {
     name: "Mild",
     players: allPlayersFor("mild"),
     songs: [
       {
         title: "Everything is Changing - Wild 19",
-        song: { id: 615, mode: Mode.Wild },
+        song: { id: 615, mode: "wild" },
       },
-      { title: "Love - Wild 20", song: { id: 1558, mode: Mode.Wild } },
+      { title: "Love - Wild 20", song: { id: 1558, mode: "wild" } },
       {
         title: "Stockholm to Bombay - Wild 21",
-        song: { id: 1554, mode: Mode.Wild },
+        song: { id: 1554, mode: "wild" },
       },
     ],
   },
@@ -67,12 +73,12 @@ export const groups = [
     songs: [
       {
         title: "Forever and a Day - Wild 22",
-        song: { id: 1531, mode: Mode.Wild },
+        song: { id: 1531, mode: "wild" },
       },
-      { title: "Exotica - Wild 23", song: { id: 12129, mode: Mode.Wild } },
+      { title: "Exotica - Wild 23", song: { id: 12129, mode: "wild" } },
       {
         title: "Rainbow Rave Parade - Wild 24",
-        song: { id: 1510, mode: Mode.Wild },
+        song: { id: 1510, mode: "wild" },
       },
     ],
   },
@@ -80,12 +86,12 @@ export const groups = [
     name: "Full",
     players: allPlayersFor("full"),
     songs: [
-      { title: "Secret 2K12 - Full 22", song: { id: 218, mode: Mode.Full } },
+      { title: "Secret 2K12 - Full 22", song: { id: 218, mode: "full" } },
       {
         title: "Boom Boom Dollars - Full 23",
-        song: { id: 30164, mode: Mode.Full },
+        song: { id: 30164, mode: "full" },
       },
-      { title: "Into My Dream - Full 24", song: { id: 1379, mode: Mode.Full } },
+      { title: "Into My Dream - Full 24", song: { id: 1379, mode: "full" } },
     ],
   },
 ];

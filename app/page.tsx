@@ -1,16 +1,33 @@
 import styles from "./page.module.css";
-import { SongInMode, filteredScoresForSong } from "@/data/statmaniax";
+import { SongMode, filteredScoresForSong } from "@/data/statmaniax";
 import { Fragment, Suspense } from "react";
 import { TableRow, HighlightContextProvider } from "./highlights";
 import { groups } from "@/data/event-data";
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { preview?: string };
+}) {
+  const preview = searchParams.preview?.toUpperCase();
   return (
     <main className={styles.main}>
       <div className={styles.description}>
         <h1>Red October Qualifiers</h1>
+        <h2 className={styles.previewHeader}>
+          Preview Player Placement
+          <form action="/" method="GET" className={styles.form}>
+            <input
+              type="search"
+              defaultValue={searchParams.preview}
+              name="preview"
+              placeholder="Player name"
+              enterKeyHint="go"
+            />
+            <button>Go</button>
+          </form>
+        </h2>
       </div>
-
       <HighlightContextProvider>
         <div className={styles.grid}>
           {groups.map((group) => (
@@ -19,7 +36,11 @@ export default function Home() {
                 <div key={table.song.id}>
                   <h2>{table.title}</h2>
                   <Suspense fallback={<div className={styles.loadingTable} />}>
-                    <ScoreTable song={table.song} players={group.players} />
+                    <ScoreTable
+                      song={table.song}
+                      players={group.players}
+                      previewPlayer={preview}
+                    />
                   </Suspense>
                 </div>
               ))}
@@ -29,6 +50,7 @@ export default function Home() {
                   <TotalTable
                     songs={group.songs.map((s) => s.song)}
                     players={group.players}
+                    previewPlayer={preview}
                   />
                 </Suspense>
               </div>
@@ -40,14 +62,26 @@ export default function Home() {
   );
 }
 
-async function ScoreTable(props: { song: SongInMode; players: Set<string> }) {
-  const scores = await filteredScoresForSong(props.players, props.song);
+async function ScoreTable(props: {
+  song: SongMode;
+  players: Set<string>;
+  previewPlayer?: string;
+}) {
+  let players = new Set(props.players);
+  if (props.previewPlayer) {
+    players.add(props.previewPlayer);
+  }
+  const scores = await filteredScoresForSong(players, props.song);
   const scoreAtIndex = (idx: number) => scores[idx].score;
   return (
     <table className={styles.scoreTable}>
       <tbody>
         {scores.map((score, idx) => (
-          <TableRow key={score.name} name={score.name}>
+          <TableRow
+            key={score.name}
+            name={score.name}
+            isPreview={score.name.toUpperCase() === props.previewPlayer}
+          >
             <td className={styles.ranks}>{rankForScore(idx, scoreAtIndex)}</td>
             <td className={styles.leftAlign}>{score.name}</td>
             <td className={styles.rightAlign}>
@@ -66,11 +100,16 @@ async function ScoreTable(props: { song: SongInMode; players: Set<string> }) {
 }
 
 async function TotalTable(props: {
-  songs: SongInMode[];
+  songs: SongMode[];
   players: Set<string>;
+  previewPlayer?: string;
 }) {
+  let players = new Set(props.players);
+  if (props.previewPlayer) {
+    players.add(props.previewPlayer);
+  }
   const scoresBySong = await Promise.all(
-    props.songs.map(filteredScoresForSong.bind(undefined, props.players)),
+    props.songs.map(filteredScoresForSong.bind(undefined, players)),
   );
   const scorePerPlayer = new Map<string, number>();
   for (const songScores of scoresBySong) {
@@ -88,7 +127,11 @@ async function TotalTable(props: {
     <table className={styles.scoreTable}>
       <tbody>
         {sortedScores.map(([name, score], idx) => (
-          <TableRow key={name} name={name}>
+          <TableRow
+            key={name}
+            name={name}
+            isPreview={name.toUpperCase() === props.previewPlayer}
+          >
             <td className={styles.ranks}>{rankForScore(idx, scoreAtIndex)}</td>
             <td className={styles.leftAlign}>{name}</td>
             <td className={styles.rightAlign}>{score.toLocaleString()}</td>
