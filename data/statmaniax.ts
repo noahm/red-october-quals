@@ -33,6 +33,12 @@ export interface SongMode {
   mode: Mode;
 }
 
+export type CacheContext = Record<string, Score[] | Promise<Score[]>>;
+
+export function getCacheContext(): CacheContext {
+  return {};
+}
+
 function cacheKey({ id, mode }: SongMode) {
   return `song:${id};mode:${mode}`;
 }
@@ -47,21 +53,38 @@ function filterPlayers<T extends { name: string }>(
 }
 
 export const filteredScoresForSong = async (
+  cacheContext: CacheContext,
   players: Set<string>,
   sim: SongMode,
-) => filterPlayers(await cachedScoresForSong(sim), players);
+) => filterPlayers(await cachedScoresForSong(sim, cacheContext || {}), players);
 
-export async function refreshCacheForSong(sim: SongMode) {
-  const results = await getScoresForSong(sim);
-  kv.set(cacheKey(sim), results, { ex: EXPIRE_SECONDS });
-  return results;
+async function cachedScoresForSong(
+  sim: SongMode,
+  cacheContext: CacheContext,
+): Promise<Score[]> {
+  const key = cacheKey(sim);
+  if (cacheContext[key]) return cacheContext[key];
+  const cachedValuePromise = kv.get<Score[]>(key).then((result) => {
+    if (!result) {
+      return refreshCacheForSong(sim, cacheContext);
+    }
+    return result;
+  });
+  return (cacheContext[key] = cachedValuePromise);
 }
 
-async function cachedScoresForSong(sim: SongMode) {
+export async function refreshCacheForSong(
+  sim: SongMode,
+  cacheContext?: CacheContext,
+): Promise<Score[]> {
+  const resultPromise = getScoresForSong(sim);
   const key = cacheKey(sim);
-  const cache = await kv.get<Score[]>(key);
-  if (cache) return cache;
-  return refreshCacheForSong(sim);
+  if (cacheContext) {
+    cacheContext[key] = resultPromise;
+  }
+  const results = await resultPromise;
+  await kv.set(key, results, { ex: EXPIRE_SECONDS });
+  return results;
 }
 
 async function getScoresForSong({ id, mode }: SongMode) {

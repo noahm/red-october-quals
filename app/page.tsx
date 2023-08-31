@@ -1,5 +1,10 @@
 import styles from "./page.module.css";
-import { SongMode, filteredScoresForSong } from "@/data/statmaniax";
+import {
+  type SongMode,
+  filteredScoresForSong,
+  getCacheContext,
+  CacheContext,
+} from "@/data/statmaniax";
 import { Fragment, Suspense } from "react";
 import { TableRow, HighlightContextProvider } from "./highlights";
 import { groups } from "@/data/event-data";
@@ -11,6 +16,7 @@ export default function Home({
   searchParams: { preview?: string };
 }) {
   const preview = searchParams.preview?.toUpperCase();
+  const cacheContext = getCacheContext();
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -38,6 +44,7 @@ export default function Home({
                   <h2>{table.title}</h2>
                   <Suspense fallback={<div className={styles.loadingTable} />}>
                     <ScoreTable
+                      cacheContext={cacheContext}
                       song={table.song}
                       players={group.players}
                       previewPlayer={preview}
@@ -49,6 +56,7 @@ export default function Home({
                 <h2>Totals: {group.name}</h2>
                 <Suspense fallback={<div className={styles.loadingTable} />}>
                   <TotalTable
+                    cacheContext={cacheContext}
                     songs={group.songs.map((s) => s.song)}
                     players={group.players}
                     previewPlayer={preview}
@@ -67,12 +75,17 @@ async function ScoreTable(props: {
   song: SongMode;
   players: Set<string>;
   previewPlayer?: string;
+  cacheContext: CacheContext;
 }) {
   let players = new Set(props.players);
   if (props.previewPlayer) {
     players.add(props.previewPlayer);
   }
-  const scores = await filteredScoresForSong(players, props.song);
+  const scores = await filteredScoresForSong(
+    props.cacheContext,
+    players,
+    props.song,
+  );
   const scoreAtIndex = (idx: number) => scores[idx].score;
   return (
     <table className={styles.scoreTable}>
@@ -104,13 +117,16 @@ async function TotalTable(props: {
   songs: SongMode[];
   players: Set<string>;
   previewPlayer?: string;
+  cacheContext: CacheContext;
 }) {
   let players = new Set(props.players);
   if (props.previewPlayer) {
     players.add(props.previewPlayer);
   }
   const scoresBySong = await Promise.all(
-    props.songs.map(filteredScoresForSong.bind(undefined, players)),
+    props.songs.map(
+      filteredScoresForSong.bind(undefined, props.cacheContext, players),
+    ),
   );
   const scorePerPlayer = new Map<string, number>();
   for (const songScores of scoresBySong) {
