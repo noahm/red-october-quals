@@ -4,9 +4,11 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   // everything
   Inzuma: { mild: true, wild: true, full: true }, // no idea what this player's IGN is
   Gr0f: { mild: true, wild: true, full: true },
+  datcoreedoe: { mild: true, wild: true, full: true },
 
   // no wild
   ZephyrNoBar: { mild: true, full: true },
+  GlobalPanda7678: { mild: true, full: true },
 
   // no mild
   Miklowcic: { wild: true, full: true },
@@ -31,6 +33,7 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   Sneaky: { wild: true },
   SMXSquid: { wild: true },
   MarkJ: { wild: true },
+  iamchris4life: { wild: true },
 
   // mild only
   Jennergy: { mild: true },
