@@ -3,8 +3,8 @@ import type { SongMode } from "./statmaniax";
 const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   // everything
   Inzuma: { mild: true, wild: true, full: true }, // no idea what this player's IGN is
-  Gr0f: { mild: true, wild: true, full: true },
   datcoreedoe: { mild: true, wild: true, full: true },
+  Cathadan: { mild: true, wild: true, full: true },
 
   // no wild
   ZephyrNoBar: { mild: true, full: true },
@@ -34,6 +34,7 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   SMXSquid: { wild: true },
   MarkJ: { wild: true },
   iamchris4life: { wild: true },
+  tayman: { wild: true },
 
   // mild only
   Jennergy: { mild: true },
@@ -45,7 +46,6 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   Pilot: { mild: true },
 
   // no full
-  Cathadan: { mild: true, wild: true },
   Shinobee: { wild: true, mild: true },
 };
 
