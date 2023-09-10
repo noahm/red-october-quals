@@ -5,6 +5,8 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   Inzuma: { mild: true, wild: true, full: true }, // no idea what this player's IGN is
   datcoreedoe: { mild: true, wild: true, full: true },
   Cathadan: { mild: true, wild: true, full: true },
+  rollingcrow: { mild: true, wild: true, full: true },
+  inglomi: { mild: true, wild: true, full: true },
 
   // no wild
   ZephyrNoBar: { mild: true, full: true },
@@ -24,6 +26,7 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   werdwerdus: { wild: true, full: true },
   Grady: { wild: true, full: true },
   WDrM: { wild: true, full: true },
+  HintZ: { wild: true, full: true },
 
   // wild only
   Yokamaa: { wild: true },
@@ -44,6 +47,7 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   Tokn316: { mild: true },
   "Big Matt": { mild: true },
   Pilot: { mild: true },
+  "daniel van eden": { mild: true },
 
   // no full
   Shinobee: { wild: true, mild: true },
