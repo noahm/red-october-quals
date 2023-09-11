@@ -1,9 +1,18 @@
 import { JSDOM } from "jsdom";
 import { kv } from "@vercel/kv";
+import { mapIter, filterIter, mergeIter } from "../app/utils";
 
 const EXPIRE_SECONDS = 60 * 60 * 36;
 
 export type Mode = "beginner" | "easy" | "hard" | "wild" | "dual" | "full";
+
+export interface PrivateScore {
+  songId: number;
+  mode: Mode;
+  score: number;
+}
+
+export type PlayersForMode = Map<string, PrivateScore[] | undefined>;
 
 export function idForMode(m: Mode) {
   switch (m) {
@@ -25,7 +34,7 @@ export function idForMode(m: Mode) {
 export interface Score {
   name: string;
   score: number;
-  timestamp: string;
+  timestamp: string | null;
 }
 
 export interface SongMode {
@@ -45,7 +54,7 @@ function cacheKey({ id, mode }: SongMode) {
 
 function filterPlayers<T extends { name: string }>(
   list: Iterable<T>,
-  players: Set<string>,
+  players: PlayersForMode,
 ) {
   return Array.from(list).filter((item) =>
     players.has(item.name.toUpperCase()),
@@ -54,9 +63,38 @@ function filterPlayers<T extends { name: string }>(
 
 export const filteredScoresForSong = async (
   cacheContext: CacheContext,
-  players: Set<string>,
+  players: PlayersForMode,
   sim: SongMode,
-) => filterPlayers(await cachedScoresForSong(sim, cacheContext || {}), players);
+) => {
+  const isApplicableScore = (s: PrivateScore) =>
+    s.songId === sim.id && s.mode === sim.mode;
+  const scores = filterPlayers(
+    await cachedScoresForSong(sim, cacheContext || {}),
+    players,
+  );
+  const playersToInsert = filterIter(
+    ([, scores]) => !!scores && scores.some(isApplicableScore),
+    players,
+  );
+  const scoresToInsert = mapIter(([name, scores]): Score => {
+    const { score } = scores!.find(isApplicableScore)!;
+    return {
+      name,
+      score,
+      timestamp: null,
+    };
+  }, playersToInsert);
+
+  return Array.from(
+    mergeIter(
+      (a, b) => {
+        return a.score - b.score;
+      },
+      scores,
+      scoresToInsert,
+    ),
+  );
+};
 
 async function cachedScoresForSong(
   sim: SongMode,

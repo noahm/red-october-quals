@@ -1,12 +1,28 @@
-import type { SongMode } from "./statmaniax";
+import type { SongMode, PrivateScore } from "./statmaniax";
 
-const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
+const players: Record<
+  string,
+  { wild?: true; mild?: true; full?: true; scores?: PrivateScore[] }
+> = {
   // everything
   Inzuma: { mild: true, wild: true, full: true }, // no idea what this player's IGN is
   datcoreedoe: { mild: true, wild: true, full: true },
   Cathadan: { mild: true, wild: true, full: true },
   rollingcrow: { mild: true, wild: true, full: true },
-  inglomi: { mild: true, wild: true, full: true },
+  inglomi: {
+    mild: true,
+    wild: true,
+    full: true,
+    scores: [
+      { songId: 218, mode: "full", score: 99491 },
+      {
+        songId: 30164,
+        mode: "full",
+        score: 99810,
+      },
+      { songId: 1379, mode: "full", score: 99876 },
+    ],
+  },
 
   // no wild
   ZephyrNoBar: { mild: true, full: true },
@@ -53,17 +69,19 @@ const players: Record<string, { wild?: true; mild?: true; full?: true }> = {
   Shinobee: { wild: true, mild: true },
 };
 
-function allPlayersFor(event: "wild" | "mild" | "full") {
-  return new Set(
+function allPlayersFor(
+  event: "wild" | "mild" | "full",
+): Map<string, PrivateScore[] | undefined> {
+  return new Map(
     Object.keys(players)
       .filter((player) => !!players[player][event])
-      .map((name) => name.toUpperCase()),
+      .map((name) => [name.toUpperCase(), players[name].scores]),
   );
 }
 
 export const groups: Array<{
   name: string;
-  players: Set<string>;
+  players: ReturnType<typeof allPlayersFor>;
   songs: Array<{ title: string; song: SongMode }>;
 }> = [
   {

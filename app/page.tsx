@@ -4,6 +4,7 @@ import {
   filteredScoresForSong,
   getCacheContext,
   CacheContext,
+  PlayersForMode,
 } from "@/data/statmaniax";
 import { Fragment, Suspense } from "react";
 import { TableRow, HighlightContextProvider } from "./highlights";
@@ -73,13 +74,13 @@ export default function Home({
 
 async function ScoreTable(props: {
   song: SongMode;
-  players: Set<string>;
+  players: PlayersForMode;
   previewPlayer?: string;
   cacheContext: CacheContext;
 }) {
-  let players = new Set(props.players);
+  let players = new Map(props.players);
   if (props.previewPlayer) {
-    players.add(props.previewPlayer);
+    players.set(props.previewPlayer, undefined);
   }
   const scores = await filteredScoresForSong(
     props.cacheContext,
@@ -102,8 +103,10 @@ async function ScoreTable(props: {
               {score.score.toLocaleString()}
             </td>
             <td className={styles.rightAlign}>
-              <time dateTime={score.timestamp}>
-                {new Date(score.timestamp).toLocaleDateString()}
+              <time dateTime={score.timestamp || "unknown date"}>
+                {score.timestamp
+                  ? new Date(score.timestamp).toLocaleDateString()
+                  : "---"}
               </time>
             </td>
           </TableRow>
@@ -115,13 +118,13 @@ async function ScoreTable(props: {
 
 async function TotalTable(props: {
   songs: SongMode[];
-  players: Set<string>;
+  players: PlayersForMode;
   previewPlayer?: string;
   cacheContext: CacheContext;
 }) {
-  let players = new Set(props.players);
+  let players = new Map(props.players);
   if (props.previewPlayer) {
-    players.add(props.previewPlayer);
+    players.set(props.previewPlayer, undefined);
   }
   const scoresBySong = await Promise.all(
     props.songs.map(
