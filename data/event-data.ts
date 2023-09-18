@@ -43,6 +43,7 @@ const players: Record<
   Grady: { wild: true, full: true },
   WDrM: { wild: true, full: true },
   HintZ: { wild: true, full: true },
+  DDRChad: { wild: true, full: true },
 
   // wild only
   Yokamaa: { wild: true },
