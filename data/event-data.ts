@@ -55,6 +55,7 @@ const players: Record<
   MarkJ: { wild: true },
   iamchris4life: { wild: true },
   tayman: { wild: true },
+  SWAGMAN: { wild: true },
 
   // mild only
   Jennergy: { mild: true },
