@@ -6,9 +6,7 @@ const players: Record<
 > = {
   // everything
   Inzuma: { mild: true, wild: true, full: true }, // no idea what this player's IGN is
-  datcoreedoe: { mild: true, wild: true, full: true },
   Cathadan: { mild: true, wild: true, full: true },
-  rollingcrow: { mild: true, wild: true, full: true },
   inglomi: {
     mild: true,
     wild: true,
@@ -27,6 +25,8 @@ const players: Record<
   // no wild
   ZephyrNoBar: { mild: true, full: true },
   GlobalPanda7678: { mild: true, full: true },
+  datcoreedoe: { mild: true, full: true },
+  rollingcrow: { mild: true, full: true },
 
   // no mild
   Miklowcic: { wild: true, full: true },
