@@ -6,7 +6,6 @@ const players: Record<
 > = {
   // everything
   Inzuma: { mild: true, wild: true, full: true }, // no idea what this player's IGN is
-  Cathadan: { mild: true, wild: true, full: true },
   inglomi: {
     mild: true,
     wild: true,
@@ -44,18 +43,19 @@ const players: Record<
   WDrM: { wild: true, full: true },
   HintZ: { wild: true, full: true },
   DDRChad: { wild: true, full: true },
+  Cathadan: { wild: true, full: true },
 
   // wild only
   Yokamaa: { wild: true },
   Twans: { wild: true },
-  minatsooki: { wild: true },
-  EvilDave: { wild: true },
+  // EvilDave: { wild: true },
   Sneaky: { wild: true },
   SMXSquid: { wild: true },
   MarkJ: { wild: true },
   iamchris4life: { wild: true },
   tayman: { wild: true },
   SWAGMAN: { wild: true },
+  Blazar: { wild: true },
 
   // mild only
   Jennergy: { mild: true },
@@ -66,6 +66,9 @@ const players: Record<
   "Big Matt": { mild: true },
   Pilot: { mild: true },
   "daniel van eden": { mild: true },
+  minatsooki: { mild: true },
+  nv4r152a: { mild: true }, // aka R4vn152
+  Arual: { mild: true },
 
   // no full
   Shinobee: { wild: true, mild: true },
