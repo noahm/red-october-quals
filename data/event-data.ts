@@ -69,18 +69,19 @@ const players: Record<
   minatsooki: { mild: true },
   nv4r152a: { mild: true }, // aka R4vn152
   Arual: { mild: true },
+  Xosen: { mild: true },
 
   // no full
   Shinobee: { wild: true, mild: true },
 };
 
 function allPlayersFor(
-  event: "wild" | "mild" | "full",
+  event: "wild" | "mild" | "full"
 ): Map<string, PrivateScore[] | undefined> {
   return new Map(
     Object.keys(players)
       .filter((player) => !!players[player][event])
-      .map((name) => [name.toUpperCase(), players[name].scores]),
+      .map((name) => [name.toUpperCase(), players[name].scores])
   );
 }
 
