@@ -6,20 +6,6 @@ const players: Record<
 > = {
   // everything
   Inzuma: { mild: true, wild: true, full: true }, // no idea what this player's IGN is
-  inglomi: {
-    mild: true,
-    wild: true,
-    full: true,
-    scores: [
-      { songId: 218, mode: "full", score: 99491 },
-      {
-        songId: 30164,
-        mode: "full",
-        score: 99810,
-      },
-      { songId: 1379, mode: "full", score: 99876 },
-    ],
-  },
 
   // no wild
   ZephyrNoBar: { mild: true, full: true },
@@ -42,8 +28,24 @@ const players: Record<
   Grady: { wild: true, full: true },
   WDrM: { wild: true, full: true },
   HintZ: { wild: true, full: true },
-  DDRChad: { wild: true, full: true },
+  // DDRChad: { wild: true, full: true },
   Cathadan: { wild: true, full: true },
+  inglomi: {
+    wild: true,
+    full: true,
+    scores: [
+      { songId: 218, mode: "full", score: 99491 },
+      {
+        songId: 30164,
+        mode: "full",
+        score: 99810,
+      },
+      { songId: 1379, mode: "full", score: 99876 },
+      { songId: 1531, mode: "wild", score: 99977 },
+      { songId: 12129, mode: "wild", score: 99918 },
+      { songId: 1510, mode: "wild", score: 99963 },
+    ],
+  },
 
   // wild only
   Yokamaa: { wild: true },
@@ -70,9 +72,7 @@ const players: Record<
   nv4r152a: { mild: true }, // aka R4vn152
   Arual: { mild: true },
   Xosen: { mild: true },
-
-  // no full
-  Shinobee: { wild: true, mild: true },
+  Shinobee: { mild: true },
 };
 
 function allPlayersFor(
