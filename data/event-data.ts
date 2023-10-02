@@ -54,7 +54,7 @@ const players: Record<
   Sneaky: { wild: true },
   SMXSquid: { wild: true },
   MarkJ: { wild: true },
-  iamchris4life: { wild: true },
+  // iamchris4life: { wild: true },
   tayman: { wild: true },
   SWAGMAN: { wild: true },
   Blazar: { wild: true },
