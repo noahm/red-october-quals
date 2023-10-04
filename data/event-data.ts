@@ -34,7 +34,7 @@ const players: Record<
     wild: true,
     full: true,
     scores: [
-      { songId: 218, mode: "full", score: 99491 },
+      { songId: 218, mode: "full", score: 99782 },
       {
         songId: 30164,
         mode: "full",
@@ -76,12 +76,12 @@ const players: Record<
 };
 
 function allPlayersFor(
-  event: "wild" | "mild" | "full"
+  event: "wild" | "mild" | "full",
 ): Map<string, PrivateScore[] | undefined> {
   return new Map(
     Object.keys(players)
       .filter((player) => !!players[player][event])
-      .map((name) => [name.toUpperCase(), players[name].scores])
+      .map((name) => [name.toUpperCase(), players[name].scores]),
   );
 }
 
